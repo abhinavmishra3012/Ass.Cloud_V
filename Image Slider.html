@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Image Slider</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #4b80b2; /* Black background */
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .slider-container {
+            max-width: 800px;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05); /* Slight white overlay for contrast */
+        }
+
+        .slider {
+            position: relative;
+            height: 400px;
+        }
+
+        .slide {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            transform: scale(0.8); /* Start scaled down */
+            transition: all 0.6s ease-in-out;
+        }
+
+        .slide.active {
+            opacity: 1;
+            transform: scale(1); /* Scale to full size */
+            z-index: 1;
+        }
+
+        .controls {
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            transform: translateY(-50%);
+            padding: 0 15px;
+            box-sizing: border-box;
+            z-index: 2;
+        }
+
+        button {
+            background: rgba(255, 255, 255, 0.8);
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        button:hover {
+            background: #ffffff;
+            transform: scale(1.15) rotate(5deg); /* Scale and slight rotate */
+        }
+
+        button:active {
+            transform: scale(0.95); /* Click feedback */
+        }
+
+        /* Animation for sliding effect */
+        .slide-from-right {
+            animation: slideFromRight 0.6s ease-in-out;
+        }
+
+        .slide-from-left {
+            animation: slideFromLeft 0.6s ease-in-out;
+        }
+
+        @keyframes slideFromRight {
+            0% {
+                opacity: 0;
+                transform: translateX(100%) scale(0.8);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(0) scale(1);
+            }
+        }
+
+        @keyframes slideFromLeft {
+            0% {
+                opacity: 0;
+                transform: translateX(-100%) scale(0.8);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(0) scale(1);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="slider-container">
+        <div class="slider" id="slider"></div>
+        <div class="controls">
+            <button onclick="prevSlide()">❮</button>
+            <button onclick="nextSlide()">❯</button>
+        </div>
+    </div>
+
+    <script>
+        
+        const images = [
+            'https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0',
+            'https://images.unsplash.com/photo-1741196776964-fff874686fa3?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+            'https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0',
+            
+        ];
+
+        let currentIndex = 0;
+        let direction = 'right'; // Track direction for animation
+
+        
+        const slider = document.getElementById('slider');
+
+        
+        function createSlides() {
+            images.forEach((imageUrl, index) => {
+                const img = document.createElement('img');
+                img.src = imageUrl;
+                img.className = 'slide';
+                if (index === 0) img.classList.add('active');
+                slider.appendChild(img);
+            });
+        }
+
+        
+        function getSlides() {
+            return document.querySelectorAll('.slide');
+        }
+
+        
+        function showSlide(index, fromDirection) {
+            const slides = getSlides();
+            const currentSlide = slides[currentIndex];
+            const nextSlide = slides[index];
+
+            
+            currentSlide.classList.remove('active', 'slide-from-right', 'slide-from-left');
+
+            
+            nextSlide.classList.remove('active', 'slide-from-right', 'slide-from-left');
+            if (fromDirection === 'right') {
+                nextSlide.classList.add('slide-from-right');
+            } else {
+                nextSlide.classList.add('slide-from-left');
+            }
+
+            
+            void nextSlide.offsetWidth;
+
+        
+            nextSlide.classList.add('active');
+            currentIndex = index;
+        }
+
+        function nextSlide() {
+            const newIndex = (currentIndex + 1) % images.length;
+            direction = 'right';
+            showSlide(newIndex, direction);
+        }
+        function prevSlide() {
+            const newIndex = (currentIndex - 1 + images.length) % images.length;
+            direction = 'left';
+            showSlide(newIndex, direction);
+        }
+        createSlides();
+
+      
+        setInterval(() => {
+            nextSlide();
+        }, 4000); // Auto-advance every 4 seconds
+    </script>
+</body>
+</html>

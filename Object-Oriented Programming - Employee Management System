@@ -1,0 +1,39 @@
+import java.util.ArrayList;
+import java.util.List;
+
+public class Employee {
+    private int id;
+    private String name;
+    private double salary;
+    public Employee(int id, String name, double salary) {
+        this.id = id;
+        this.name = name;
+        this.salary = salary;
+    }
+    public void displayDetails() {
+        System.out.println("Employee ID: " + id);
+        System.out.println("Name: " + name);
+        System.out.println("Salary: Rs." + String.format("%.2f", salary));
+        System.out.println("------------------");
+    }
+    
+    // Main method
+    public static void main(String[] args) {
+        List<Employee> employees = new ArrayList<>();
+        Employee emp1 = new Employee(111, "Krishna Dwivedi", 75000.00);
+        Employee emp2 = new Employee(112, "Himashu Rai", 82000.25);
+        Employee emp3 = new Employee(113, "Piyush Sahi", 68000.50);
+        
+        employees.add(emp1);
+        employees.add(emp2);
+        employees.add(emp3);
+        
+        System.out.println("Cloud Vandana Employee Details:");
+        System.out.println("==================");
+        for (Employee emp : employees) {
+            emp.displayDetails();
+        }
+        
+        System.out.println("Total Employees: " + employees.size());
+    }
+}

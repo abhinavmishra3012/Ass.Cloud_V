@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>To-Do List</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            transition: background 0.5s ease;
+        }
+
+        /* Bright Mode (default) */
+        body.bright {
+            background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+            color: #3bacac;
+        }
+
+        /* Dark Mode */
+        body.dark {
+            background: linear-gradient(135deg, #1e1e2f, #2a2a40);
+            color: #dc6bc7;
+        }
+
+        h1 {
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .input-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        #taskInput, #taskDate {
+            padding: 12px;
+            border: none;
+            border-radius: 25px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        #taskInput {
+            flex: 2;
+        }
+
+        #taskDate {
+            flex: 1;
+        }
+
+        #taskInput:focus, #taskDate:focus {
+            outline: none;
+            transform: scale(1.02);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .input-container button {
+            background: #ff6b6b;
+            color: white;
+        }
+
+        .input-container button:hover {
+            background: #ff8787;
+            transform: scale(1.05) rotate(2deg);
+        }
+
+        #modeToggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #4ecdc4;
+            color: white;
+        }
+
+        #modeToggle:hover {
+            background: #45b7b0;
+            transform: scale(1.1);
+        }
+
+        #taskList {
+            list-style: none;
+            padding: 0;
+        }
+
+        .task-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: rgba(212, 124, 206, 0.9);
+            margin: 15px 0;
+            padding: 15px;
+            border-radius: 15px;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+            animation: slideIn 0.4s ease-out;
+        }
+
+        body.dark .task-item {
+            background: #d5dd44ef;
+        }
+
+        .task-content {
+            flex: 1;
+        }
+
+        .task-date {
+            color: #63d4e1;
+            font-size: 0.9em;
+        }
+
+        body.dark .task-date {
+            color: #bbb;
+        }
+
+        .task-item button {
+            background: #ff9f1c;
+            color: white;
+        }
+
+        .task-item button:hover {
+            background: #ffb347;
+            transform: scale(1.05);
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .remove-animation {
+            animation: slideOut 0.4s ease forwards;
+        }
+
+        @keyframes slideOut {
+            from {
+                opacity: 1;
+                transform: translateX(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+        }
+    </style>
+</head>
+<body class="bright">
+    <button id="modeToggle" onclick="toggleMode()">Dark Mode</button>
+    <div class="container">
+        <h1>To-Do List</h1>
+        <div class="input-container">
+            <input type="text" id="taskInput" placeholder="Enter a new task">
+            <input type="date" id="taskDate">
+            <button onclick="addTask()">Add Task</button>
+        </div>
+        <ul id="taskList"></ul>
+    </div>
+
+    <script>
+        function addTask() {
+            const taskInput = document.getElementById('taskInput');
+            const taskDate = document.getElementById('taskDate');
+            const taskText = taskInput.value.trim();
+            const taskDateValue = taskDate.value;
+
+            if (taskText === '') {
+                alert('Please enter a task!');
+                return;
+            }
+
+            const li = document.createElement('li');
+            li.className = 'task-item';
+
+            const taskContent = document.createElement('div');
+            taskContent.className = 'task-content';
+
+            const taskSpan = document.createElement('span');
+            taskSpan.textContent = taskText;
+
+            const dateSpan = document.createElement('span');
+            dateSpan.className = 'task-date';
+            dateSpan.textContent = taskDateValue ? `Due: ${formatDate(taskDateValue)}` : '';
+
+            const deleteButton = document.createElement('button');
+            deleteButton.textContent = 'Remove';
+            deleteButton.onclick = function() {
+                li.classList.add('remove-animation');
+                li.addEventListener('animationend', () => li.remove(), { once: true });
+            };
+
+            taskContent.appendChild(taskSpan);
+            if (taskDateValue) taskContent.appendChild(dateSpan);
+            li.appendChild(taskContent);
+            li.appendChild(deleteButton);
+            document.getElementById('taskList').appendChild(li);
+
+            taskInput.value = '';
+            taskDate.value = '';
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric'
+            });
+        }
+
+        function toggleMode() {
+            const body = document.body;
+            const button = document.getElementById('modeToggle');
+            if (body.classList.contains('bright')) {
+                body.classList.remove('bright');
+                body.classList.add('dark');
+                button.textContent = 'Bright Mode';
+            } else {
+                body.classList.remove('dark');
+                body.classList.add('bright');
+                button.textContent = 'Dark Mode';
+            }
+        }
+
+        document.getElementById('taskInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                addTask();
+            }
+        });
+    </script>
+</body>
+</html>

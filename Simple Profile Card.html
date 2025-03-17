@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animated Profile Card</title>
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+            font-family: Arial, sans-serif;
+        }
+
+        .profile-card {
+            background: white;
+            width: 340px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            transform: scale(0.9);
+            animation: cardEnter 0.6s ease-out forwards;
+        }
+
+        @keyframes cardEnter {
+            from {
+                opacity: 0;
+                transform: scale(0.9) translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .profile-card:hover {
+            transform: scale(1.03);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .profile-image {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            margin: 30px auto 20px;
+            display: block;
+            border: 5px solid #fff;
+            animation: imageFade 0.8s ease-out;
+        }
+
+        @keyframes imageFade {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .profile-info {
+            padding: 0 25px 35px;
+            text-align: center;
+        }
+
+        .name {
+            font-size: 26px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 8px;
+            opacity: 0;
+            animation: slideUp 0.5s ease 0.3s forwards;
+        }
+
+        .designation {
+            font-size: 16px;
+            color: #3498db;
+            margin-bottom: 15px;
+            opacity: 0;
+            animation: slideUp 0.5s ease 0.4s forwards;
+        }
+
+        .bio {
+            font-size: 14px;
+            color: #7f8c8d;
+            line-height: 1.6;
+            margin-bottom: 25px;
+            opacity: 0;
+            animation: slideUp 0.5s ease 0.5s forwards;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 18px;
+        }
+
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: white;
+            font-size: 18px;
+            position: relative;
+            transform: scale(0);
+            animation: popIn 0.4s ease forwards;
+        }
+
+        .social-icon:nth-child(1) { animation-delay: 0.6s; }
+        .social-icon:nth-child(2) { animation-delay: 0.7s; }
+        .social-icon:nth-child(3) { animation-delay: 0.8s; }
+        .social-icon:nth-child(4) { animation-delay: 0.9s; }
+
+        @keyframes popIn {
+            from {
+                transform: scale(0);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* Specific Social Media Colors */
+        .x { background: linear-gradient(45deg, #000000, #333333); } /* X */
+        .linkedin { background: linear-gradient(45deg, #0077b5, #00a0dc); } /* LinkedIn */
+        .instagram { background: linear-gradient(45deg, #833ab4, #fd1d1d); } /* Instagram */
+        .github { background: linear-gradient(45deg, #333333, #6e5494); } /* GitHub */
+
+        .social-icon:hover {
+            transform: scale(1.2) rotate(360deg);
+            transition: all 0.4s ease;
+        }
+
+        .social-icon::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(0);
+        }
+
+        .social-icon:hover::before {
+            animation: pulse 0.8s ease;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.5); opacity: 0.5; }
+            100% { transform: scale(2); opacity: 0; }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 400px) {
+            .profile-card {
+                width: 90%;
+                margin: 20px;
+            }
+            
+            .profile-image {
+                width: 120px;
+                height: 120px;
+            }
+            
+            .name {
+                font-size: 22px;
+            }
+            
+            .social-icon {
+                width: 35px;
+                height: 35px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="profile-card">
+        <img src="./images.jpeg" alt="Profile Picture" class="profile-image">
+        <div class="profile-info">
+            <h2 class="name">Narendra Modi</h2>
+            <p class="designation">Prime Minister of India</p>
+            <p class="bio">New Delhi, India</p>
+            <div class="social-icons">
+                <a href="https://x.com/sundarpichai" class="social-icon x"><i class="fab fa-x-twitter"></i></a>
+                <a href="https://www.linkedin.com/in/sundarpichai/" class="social-icon linkedin"><i class="fab fa-linkedin-in"></i></a>
+                <a href="https://www.instagram.com/sundarpichai/?hl=en" class="social-icon instagram"><i class="fab fa-instagram"></i></a>
+                <a href="https://github.com/google" class="social-icon github"><i class="fab fa-github"></i></a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
